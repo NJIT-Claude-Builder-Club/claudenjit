@@ -71,3 +71,27 @@ export function createTextSmoother(onText: (text: string) => void, options: Text
     },
   };
 }
+
+export interface ClubLink {
+  channel: string;
+  label: string;
+  description: string;
+  url: string;
+}
+
+// Collect link cards from show_club_links results, ignoring malformed entries and unsafe URLs.
+export function getClubLinks(toolsUsed: Array<{ name: string; result?: unknown }> = []): ClubLink[] {
+  const links = new Map<string, ClubLink>();
+  for (const tool of toolsUsed) {
+    if (tool.name !== 'show_club_links') continue;
+    const entries = (tool.result as { links?: unknown } | undefined)?.links;
+    if (!Array.isArray(entries)) continue;
+    for (const entry of entries) {
+      const { channel, label, description, url } = (entry ?? {}) as Record<string, unknown>;
+      if ([channel, label, description, url].every((value) => typeof value === 'string') && /^(https:\/\/|mailto:)/.test(url as string)) {
+        links.set(channel as string, { channel, label, description, url } as ClubLink);
+      }
+    }
+  }
+  return [...links.values()];
+}

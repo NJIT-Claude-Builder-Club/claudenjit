@@ -71,3 +71,19 @@ test('unknown sections cannot access inherited object properties', async () => {
   assert.equal((await executeMCPTool('get_club_info',{info_type:'__proto__'})).status,'not_confirmed');
   assert.equal((await executeMCPTool('get_member_benefits',{topic:'constructor'})).status,'not_confirmed');
 });
+
+test('club link cards come from the maintained contacts, including Highlander Hub', async () => {
+  const result = await executeMCPTool('show_club_links',{channels:['highlander_hub','discord','discord','myspace','__proto__']});
+  assert.equal(result.status,'shown');
+  assert.deepEqual(result.links.map(({channel,url})=>[channel,url]), [
+    ['highlander_hub','https://njit.campuslabs.com/engage/organization/claudebuilderclub'],
+    ['discord',club.contacts.discord],
+  ]);
+  const all = await executeMCPTool('show_club_links',{channels:['instagram','email','github']});
+  assert.deepEqual(all.links.map(({url})=>url), [club.contacts.instagram,`mailto:${club.contacts.email}`,club.contacts.github]);
+  assert.equal((await executeMCPTool('show_club_links',{channels:'discord'})).status,'not_confirmed');
+  assert.equal((await executeMCPTool('show_club_links',{})).status,'not_confirmed');
+  const tool = DEFAULT_MCP_TOOLS.find(({name})=>name==='show_club_links');
+  assert.deepEqual(tool.input_schema.properties.channels.items.enum, ['discord','instagram','highlander_hub','email','github']);
+  assert(getSystemMessage(new Date('2026-10-30T14:00:00Z')).includes(club.contacts.highlanderHub));
+});

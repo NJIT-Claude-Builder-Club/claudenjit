@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createTextSmoother, getTimeGreeting } from '../src/lib/chat-presentation.ts';
+import { createTextSmoother, getClubLinks, getTimeGreeting } from '../src/lib/chat-presentation.ts';
 
 test('greeting switches at local morning, noon, and evening boundaries', () => {
   for (const [hour, period] of [[0,'evening'],[4,'evening'],[5,'morning'],[11,'morning'],[12,'afternoon'],[16,'afternoon'],[17,'evening'],[23,'evening']]) {
@@ -54,4 +54,17 @@ test('cancellation discards queued text and settles completion waiters', async (
 test('reduced motion displays chunks immediately', async () => {
   const h = harness(true); h.smoother.append('Hello'); h.smoother.append(' NJIT!');
   await h.smoother.finish(); assert.equal(h.updates.at(-1), 'Hello NJIT!'); assert.equal(h.frames.size, 0);
+});
+
+test('club link cards use only well-formed show_club_links results with safe URLs', () => {
+  const discord = { channel: 'discord', label: 'Discord', description: 'Chat', url: 'https://discord.gg/x' };
+  const email = { channel: 'email', label: 'Email', description: 'a@b.c', url: 'mailto:a@b.c' };
+  assert.deepEqual(getClubLinks([
+    { name: 'get_club_info', result: { links: [discord] } },
+    { name: 'show_club_links' },
+    { name: 'show_club_links', result: { status: 'not_confirmed' } },
+    { name: 'show_club_links', result: { links: [discord, null, { ...email, channel: 'bad', url: 'javascript:alert(1)' }, { channel: 'x' }] } },
+    { name: 'show_club_links', result: { links: [email, discord] } },
+  ]), [discord, email]);
+  assert.deepEqual(getClubLinks(), []);
 });

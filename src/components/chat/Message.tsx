@@ -5,6 +5,8 @@ import { Message as MessageType } from '@/lib/chat-store';
 import { Check, Copy } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { ThinkingIndicator } from './ThinkingIndicator';
+import { ClubLinkCards } from './ClubLinkCards';
+import { getClubLinks } from '@/lib/chat-presentation';
 
 export const Message = memo(function Message({ message }: { message: MessageType }) {
   const [copied, setCopied] = useState(false);
@@ -39,6 +41,7 @@ export const Message = memo(function Message({ message }: { message: MessageType
           <div className="message-markdown"><ReactMarkdown>{message.content}</ReactMarkdown></div>
         </div>
       )}
+      <ClubLinkCards links={getClubLinks(message.toolsUsed)} />
       {message.isStreaming && message.isThinking && (
         <ThinkingIndicator />
       )}
