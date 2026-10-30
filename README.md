@@ -18,6 +18,8 @@ Create a local `.env.local` file:
 ANTHROPIC_API_KEY=your-api-key-here
 # Optional override; the default is claude-sonnet-4-6.
 ANTHROPIC_MODEL=claude-sonnet-4-6
+# Optional override for the prompt screen; the default is claude-haiku-5-5.
+ANTHROPIC_SCREEN_MODEL=claude-haiku-5-5
 ```
 
 ```sh
@@ -47,7 +49,17 @@ For live response evaluation:
 npm run eval:chat -- https://www.claudenjit.com
 ```
 
-This makes nine real API requests. Review both the checks and the actual reply text. The suite covers current leadership, unconfirmed event details, member benefits, private-program questions, conflicting chat history, and natural response style.
+This sends thirteen chat requests, spaced to stay under the rate limit. All but the gibberish check reach Claude (a Haiku screen, then the main model), so the run consumes API credits. Review both the checks and the actual reply text. The suite covers current leadership, unconfirmed event details, member benefits, private-program questions, conflicting chat history, and natural response style.
+
+## Abuse limits
+
+`src/lib/chat-guard.ts` runs before the main model:
+
+- Code-only checks cost no tokens: at most 10 requests per minute and 100 per hour per IP, a 4,000-character message limit, at most 4 images under 5 MB each, and history trimmed to the last 30 messages or 40,000 characters. Obvious gibberish gets a fixed reply.
+- The latest message is then screened by `claude-haiku-5-5` (override with `ANTHROPIC_SCREEN_MODEL`) for gibberish and requests for long, unrelated output. If the screen fails, the message is allowed.
+- Replies are capped at 2,048 output tokens.
+
+Rate limits are kept in memory, so each server instance counts separately and the counts reset on cold starts. Use a shared store if stricter limits are needed.
 
 ## Existing club channels
 
