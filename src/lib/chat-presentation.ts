@@ -123,3 +123,18 @@ export function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   return ((parts[0]?.[0] ?? '') + (parts.length > 1 ? parts.at(-1)![0] : '')).toUpperCase();
 }
+
+type DisplayTools = Array<{ name: string; result?: unknown }>;
+
+export function hasDisplayedCards(toolsUsed: DisplayTools = []): boolean {
+  return getEboardCards(toolsUsed).length > 0 || getClubLinks(toolsUsed).length > 0;
+}
+
+// Copying a reply includes what its cards show, since the text no longer repeats it.
+export function getCopyText(content: string, toolsUsed: DisplayTools = []): string {
+  const cards = [
+    ...getEboardCards(toolsUsed).map((member) => `${member.name} · ${member.role}`),
+    ...getClubLinks(toolsUsed).map((link) => `${link.label}: ${link.url.replace(/^mailto:/, '')}`),
+  ];
+  return [content.trim(), cards.join('\n')].filter(Boolean).join('\n\n');
+}

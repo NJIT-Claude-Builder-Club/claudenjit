@@ -65,7 +65,7 @@ export const DEFAULT_MCP_TOOLS: MCPTool[] = [
   },
   {
     name: 'show_eboard',
-    description: 'Show photo cards for current e-board members below your reply. Use it when a member asks who leads the club or about a specific officer. Members without a photo get an initials avatar. Still name each member and role in your reply.',
+    description: 'Show photo cards for current e-board members below your reply. Use it when a member asks who leads the club or about a specific officer. The cards show each name, role, and photo, so do not repeat them in your reply; a short lead-in sentence is enough.',
     input_schema: {
       type: 'object',
       properties: {

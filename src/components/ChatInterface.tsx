@@ -7,7 +7,7 @@ import { MessageList } from './chat/MessageList';
 import { ChatInput } from './chat/ChatInput';
 import { readChatEvents } from '@/lib/chat-stream';
 import { TimeGreeting } from './TimeGreeting';
-import { createTextSmoother } from '@/lib/chat-presentation';
+import { createTextSmoother, hasDisplayedCards } from '@/lib/chat-presentation';
 import { useKeyboardViewport } from '@/lib/use-keyboard-viewport';
 import { SquarePen } from 'lucide-react';
 
@@ -135,7 +135,7 @@ export function ChatInterface() {
           completed = true;
         }
       }
-      if (!completed || !currentContent.trim()) {
+      if (!completed || (!currentContent.trim() && !hasDisplayedCards(toolsUsed))) {
         throw new Error('Chat returned an incomplete response. Please try again.');
       }
       await textSmoother.finish();
