@@ -41,7 +41,7 @@ The chat route uses the Node.js runtime with a 60-second maximum duration. Confi
 
 Read [the context maintenance guide](docs/club-context.md) before changing club facts or prompt behavior. The approved data is in `src/data/club-context.json` and `src/data/eboard.json`. The system prompt and tools use the same source data. Context is dated and explicitly treated as last confirmed after 90 days without a review.
 
-The assistant's tools read maintained club information. They do not browse live announcements, access private documents, register members, or inspect credit balances. There is no live calendar or social-media sync.
+The assistant's tools read maintained club information, and `show_club_links` renders link cards for the club's channels below a reply. They do not browse live announcements, access private documents, register members, or inspect credit balances. There is no live calendar or social-media sync.
 
 For live response evaluation:
 
@@ -49,7 +49,7 @@ For live response evaluation:
 npm run eval:chat -- https://www.claudenjit.com
 ```
 
-This sends thirteen chat requests, spaced to stay under the rate limit. All but the gibberish check reach Claude (a Haiku screen, then the main model), so the run consumes API credits. Review both the checks and the actual reply text. The suite covers current leadership, unconfirmed event details, member benefits, private-program questions, conflicting chat history, and natural response style.
+This sends fourteen chat requests, spaced to stay under the rate limit. All but the gibberish check reach Claude (a Haiku screen, then the main model), so the run consumes API credits. Review both the checks and the actual reply text. The suite covers current leadership, unconfirmed event details, member benefits, private-program questions, conflicting chat history, and natural response style.
 
 ## Abuse limits
 
@@ -66,4 +66,5 @@ Rate limits are kept in memory, so each server instance counts separately and th
 - Email: njitclaudebuilderclub@gmail.com
 - Discord: https://discord.gg/Z36MRK6jnS
 - Instagram: https://www.instagram.com/claudenjit/
+- Highlander Hub: https://njit.campuslabs.com/engage/organization/claudebuilderclub
 - GitHub: https://github.com/NJIT-Claude-Builder-Club

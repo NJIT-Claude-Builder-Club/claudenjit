@@ -100,6 +100,16 @@ button { transition: background-color 150ms, color 150ms, opacity 150ms; }
 .message-copy:hover { background: #ffffff08; color: #d7d4c9; }
 .copy-status { font-size: 11px; color: var(--muted); }
 .has-error .assistant-text { color: #deb09b; }
+.club-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin: 14px 0 0; padding: 0; list-style: none; }
+.club-links li { display: flex; }
+.club-link { flex: 1; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 11px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); text-decoration: none; transition: border-color .15s, background-color .15s; }
+.club-link:hover, .club-link:focus-visible { border-color: #5a574f; background: #2a2a27; }
+.club-link:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.club-link-icon { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9px; background: #ffffff0a; color: var(--primary); }
+.club-link-text { display: flex; flex-direction: column; min-width: 0; }
+.club-link-label { font-size: 15px; font-weight: 500; line-height: 1.3; }
+.club-link-description { color: var(--muted); font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+.club-link-arrow { flex: 0 0 auto; margin-left: auto; color: var(--muted); }
 .conversation-composer { width: 100%; max-width: 800px; align-self: center; padding: 0 max(16px, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(16px, env(safe-area-inset-left)); flex-shrink: 0; }
 .chat-disclaimer { margin: 10px 0 13px; text-align: center; color: #88867f; font-size: 11px; }
 

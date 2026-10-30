@@ -11,6 +11,15 @@ export interface MCPTool {
   };
 }
 
+const { contacts } = clubContext;
+export const CLUB_CHANNELS: Record<string, { label: string; description: string; url: string }> = {
+  discord: { label: 'Discord', description: 'Announcements and chat', url: contacts.discord },
+  instagram: { label: 'Instagram', description: '@claudenjit', url: contacts.instagram },
+  highlander_hub: { label: 'Highlander Hub', description: 'NJIT student org page', url: contacts.highlanderHub },
+  email: { label: 'Email', description: contacts.email, url: `mailto:${contacts.email}` },
+  github: { label: 'GitHub', description: 'NJIT-Claude-Builder-Club', url: contacts.github },
+};
+
 export const DEFAULT_MCP_TOOLS: MCPTool[] = [
   {
     name: 'get_club_info',
@@ -37,6 +46,21 @@ export const DEFAULT_MCP_TOOLS: MCPTool[] = [
       type: 'object',
       properties: { topic: { type: 'string', enum: ['overview', 'eligibility', 'organization_id', 'request_process', 'claude_pro'] } },
       required: ['topic'],
+    },
+  },
+  {
+    name: 'show_club_links',
+    description: 'Show clickable cards for official club channels below your reply. Use it whenever you direct a member to a channel, such as how to join, follow, contact, or get announcements from the club. The cards display the links, so refer to channels by name instead of repeating URLs.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        channels: {
+          type: 'array',
+          items: { type: 'string', enum: Object.keys(CLUB_CHANNELS) },
+          description: 'The relevant channels, most relevant first. Usually one to three.',
+        },
+      },
+      required: ['channels'],
     },
   },
   {
@@ -85,6 +109,15 @@ export async function executeMCPTool(toolName: string, toolInput: Record<string,
       const key = String(toolInput.topic);
       const data = Object.hasOwn(sections, key) ? sections[key] : undefined;
       return data === undefined ? unconfirmed('This member benefit is not confirmed.') : { ...metadata, data };
+    }
+    case 'show_club_links': {
+      const requested = Array.isArray(toolInput.channels) ? toolInput.channels.map(String) : [];
+      const links = [...new Set(requested)]
+        .filter((channel) => Object.hasOwn(CLUB_CHANNELS, channel))
+        .map((channel) => ({ channel, ...CLUB_CHANNELS[channel] }));
+      return links.length === 0
+        ? unconfirmed('That club channel is not available.')
+        : { ...metadata, status: 'shown', message: 'Link cards are now shown to the member below your reply.', links };
     }
     case 'search_workshops':
       return { ...metadata, status: 'no_confirmed_events', meetings: [], workshops: [], plannedHackathon: clubContext.events.hackathon, announcements: clubContext.contacts.discord, message: 'No specific meeting or workshop is confirmed in this maintained data. This is not a live calendar search.' };
