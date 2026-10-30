@@ -101,6 +101,13 @@ button { transition: background-color 150ms, color 150ms, opacity 150ms; }
 .copy-status { font-size: 11px; color: var(--muted); }
 .has-error .assistant-text { color: #deb09b; }
 .club-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin: 14px 0 0; padding: 0; list-style: none; }
+.eboard-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+.eboard-card { padding: 10px 10px 12px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+.eboard-photo { position: relative; display: grid; place-items: center; aspect-ratio: 1; overflow: hidden; margin-bottom: 10px; border-radius: 10px; background: #2c2c29; }
+.eboard-photo img { object-fit: cover; }
+.eboard-initials { color: var(--primary); font-size: 34px; font-weight: 500; letter-spacing: 1px; }
+.eboard-name { font-size: 15px; font-weight: 500; line-height: 1.3; }
+.eboard-role { color: var(--muted); font-size: 13px; line-height: 1.4; }
 .club-links li { display: flex; }
 .club-link { flex: 1; display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 11px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); text-decoration: none; transition: border-color .15s, background-color .15s; }
 .club-link:hover, .club-link:focus-visible { border-color: #5a574f; background: #2a2a27; }

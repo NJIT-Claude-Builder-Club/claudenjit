@@ -5,7 +5,7 @@ const base = process.argv[2];
 if (!base || !/^https?:\/\//.test(base)) throw new Error('Pass the app URL explicitly: npm run eval:chat -- https://www.claudenjit.com');
 const uncertainty = /\b(?:not|no|none)\b[\s\S]{0,160}(?:confirm|announc|available)|haven't|hasn't|don't have|aren't/i;
 const cases = [
-  {name:'current e-board',prompt:'Who is on the e-board and what are their roles?',required:[/Donovan McHenry/,/President/,/Walter Zhong/,/Vice President/,/Dhruva Lepakshi/,/Marketing Manager/],forbidden:[/Tai Vu|Ahmed Asad|Taylor|Nathalie|Tasnima|Thong|Liezeil|Gia Tailor|Shukan Dave/]},
+  {name:'current e-board',prompt:'Who is on the e-board and what are their roles?',required:[/Donovan McHenry/,/President/,/Walter Zhong/,/Vice President/,/Dhruva Lepakshi/,/Marketing Manager/],tools:['show_eboard'],forbidden:[/Tai Vu|Ahmed Asad|Taylor|Nathalie|Tasnima|Thong|Liezeil|Gia Tailor|Shukan Dave/]},
   {name:'hackathon uncertainty',prompt:'When is the next hackathon? Tell me its date, room, prizes, and team size.',required:[/Spring 2027/i,uncertainty],forbidden:[/April 26|Kupfrian|\$500|\$100|up to (?:4|four)/i]},
   {name:'unknown meeting time',prompt:'What day and time is the next club meeting?',required:[uncertainty],forbidden:[/every (?:Monday|Tuesday|Wednesday|Thursday|Friday)|\d{1,2}:\d{2}\s*(?:AM|PM)/i]},
   {name:'joining is not Pro',prompt:'If I join, do I automatically get free Claude Pro and instant credits?',required:[/API/i,/\$25/,/Pro/,/meeting/i,/check.?in/i],forbidden:[/automatically get (?:free )?Claude Pro|instant approval|isn't a confirmed|not a confirmed member benefit/i]},

@@ -4,9 +4,10 @@ import club from '../src/data/club-context.json' with { type: 'json' };
 import board from '../src/data/eboard.json' with { type: 'json' };
 import { getSystemMessage } from '../src/lib/chat-policy.ts';
 import { DEFAULT_MCP_TOOLS, executeMCPTool } from '../src/lib/mcp-tools.ts';
+import { existsSync, readdirSync } from 'node:fs';
 
 test('club tools and system context use the same three confirmed officers', async () => {
-  assert.deepEqual(board, [
+  assert.deepEqual(board.map(({name,role})=>({name,role})), [
     {name:'Donovan McHenry',role:'President'},
     {name:'Walter Zhong',role:'Vice President'},
     {name:'Dhruva Lepakshi',role:'Marketing Manager'},
@@ -86,4 +87,17 @@ test('club link cards come from the maintained contacts, including Highlander Hu
   const tool = DEFAULT_MCP_TOOLS.find(({name})=>name==='show_club_links');
   assert.deepEqual(tool.input_schema.properties.channels.items.enum, ['discord','instagram','highlander_hub','email','github']);
   assert(getSystemMessage(new Date('2026-10-30T14:00:00Z')).includes(club.contacts.highlanderHub));
+});
+
+test('e-board cards use local photos for current members only', async () => {
+  const photos = board.map(({photo})=>photo).filter(Boolean);
+  for (const photo of photos) assert(existsSync(new URL(`../public${photo}`, import.meta.url)), photo);
+  assert.deepEqual(readdirSync(new URL('../public/eboardpics', import.meta.url)).map((file)=>`/eboardpics/${file}`).sort(), [...photos].sort());
+  assert.equal(board.find(({name})=>name==='Dhruva Lepakshi').photo, null);
+
+  assert.deepEqual((await executeMCPTool('show_eboard',{})).members, board);
+  assert.deepEqual((await executeMCPTool('show_eboard',{names:['Walter Zhong']})).members.map(({name})=>name), ['Walter Zhong']);
+  assert.equal((await executeMCPTool('show_eboard',{names:['Tai Vu']})).status,'not_confirmed');
+  const tool = DEFAULT_MCP_TOOLS.find(({name})=>name==='show_eboard');
+  assert.deepEqual(tool.input_schema.properties.names.items.enum, board.map(({name})=>name));
 });

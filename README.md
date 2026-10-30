@@ -41,7 +41,7 @@ The chat route uses the Node.js runtime with a 60-second maximum duration. Confi
 
 Read [the context maintenance guide](docs/club-context.md) before changing club facts or prompt behavior. The approved data is in `src/data/club-context.json` and `src/data/eboard.json`. The system prompt and tools use the same source data. Context is dated and explicitly treated as last confirmed after 90 days without a review.
 
-The assistant's tools read maintained club information, and `show_club_links` renders link cards for the club's channels below a reply. They do not browse live announcements, access private documents, register members, or inspect credit balances. There is no live calendar or social-media sync.
+The assistant's tools read maintained club information. `show_club_links` renders link cards for the club's channels below a reply, and `show_eboard` renders e-board photo cards. They do not browse live announcements, access private documents, register members, or inspect credit balances. There is no live calendar or social-media sync.
 
 For live response evaluation:
 

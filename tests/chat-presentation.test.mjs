@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createTextSmoother, getClubLinks, getTimeGreeting } from '../src/lib/chat-presentation.ts';
+import { createTextSmoother, getClubLinks, getEboardCards, getInitials, getTimeGreeting } from '../src/lib/chat-presentation.ts';
 
 test('greeting switches at local morning, noon, and evening boundaries', () => {
   for (const [hour, period] of [[0,'evening'],[4,'evening'],[5,'morning'],[11,'morning'],[12,'afternoon'],[16,'afternoon'],[17,'evening'],[23,'evening']]) {
@@ -67,4 +67,23 @@ test('club link cards use only well-formed show_club_links results with safe URL
     { name: 'show_club_links', result: { links: [email, discord] } },
   ]), [discord, email]);
   assert.deepEqual(getClubLinks(), []);
+});
+
+test('e-board cards accept only local photos and fall back to initials', () => {
+  assert.deepEqual(getEboardCards([
+    { name: 'show_club_links', result: { members: [{ name: 'X', role: 'Y', photo: null }] } },
+    { name: 'show_eboard', result: { members: [
+      { name: 'Donovan McHenry', role: 'President', photo: '/eboardpics/donovan-mchenry.png' },
+      { name: 'Walter Zhong', role: 'Vice President', photo: 'https://evil.example/x.png' },
+      { name: 'Dhruva Lepakshi', role: 'Marketing Manager', photo: '/eboardpics/../secret' },
+      { name: 'No role' }, null,
+    ] } },
+  ]), [
+    { name: 'Donovan McHenry', role: 'President', photo: '/eboardpics/donovan-mchenry.png' },
+    { name: 'Walter Zhong', role: 'Vice President', photo: null },
+    { name: 'Dhruva Lepakshi', role: 'Marketing Manager', photo: null },
+  ]);
+  assert.equal(getInitials('Dhruva Lepakshi'), 'DL');
+  assert.equal(getInitials('  Cher '), 'C');
+  assert.equal(getInitials('Mary Jo Smith'), 'MS');
 });
