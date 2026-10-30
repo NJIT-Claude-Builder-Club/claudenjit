@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { tiempos, styrene } from "./fonts";
+import { tiempos, styrene, styreneB } from "./fonts";
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${tiempos.variable} ${styrene.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${tiempos.variable} ${styrene.variable} ${styreneB.variable}`} suppressHydrationWarning>
       <body className="font-body antialiased">
         {children}
       </body>
