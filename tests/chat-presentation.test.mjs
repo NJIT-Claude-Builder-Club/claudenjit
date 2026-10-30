@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createTextSmoother, getClubLinks, getEboardCards, getInitials, getTimeGreeting } from '../src/lib/chat-presentation.ts';
+import { createTextSmoother, getClubLinks, getCopyText, getEboardCards, getInitials, getTimeGreeting, hasDisplayedCards } from '../src/lib/chat-presentation.ts';
 
 test('greeting switches at local morning, noon, and evening boundaries', () => {
   for (const [hour, period] of [[0,'evening'],[4,'evening'],[5,'morning'],[11,'morning'],[12,'afternoon'],[16,'afternoon'],[17,'evening'],[23,'evening']]) {
@@ -86,4 +86,17 @@ test('e-board cards accept only local photos and fall back to initials', () => {
   assert.equal(getInitials('Dhruva Lepakshi'), 'DL');
   assert.equal(getInitials('  Cher '), 'C');
   assert.equal(getInitials('Mary Jo Smith'), 'MS');
+});
+
+test('card-only replies count as complete and copy includes card contents', () => {
+  const tools = [
+    { name: 'show_eboard', result: { members: [{ name: 'Donovan McHenry', role: 'President', photo: null }] } },
+    { name: 'show_club_links', result: { links: [{ channel: 'email', label: 'Email', description: 'x', url: 'mailto:a@b.c' }] } },
+  ];
+  assert.equal(hasDisplayedCards(tools), true);
+  assert.equal(hasDisplayedCards([{ name: 'get_club_info', result: {} }]), false);
+  assert.equal(hasDisplayedCards(), false);
+  assert.equal(getCopyText("Here's the current e-board.", tools), "Here's the current e-board.\n\nDonovan McHenry · President\nEmail: a@b.c");
+  assert.equal(getCopyText('', tools), 'Donovan McHenry · President\nEmail: a@b.c');
+  assert.equal(getCopyText('  Plain reply. ', []), 'Plain reply.');
 });

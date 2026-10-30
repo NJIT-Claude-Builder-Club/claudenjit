@@ -9,7 +9,7 @@ export function EboardCards({ members }: { members: EboardCard[] }) {
         <li key={member.name} className="eboard-member">
           <span className="eboard-avatar">
             {member.photo
-              ? <Image src={member.photo} alt="" fill sizes="40px" />
+              ? <Image src={member.photo} alt="" fill sizes="72px" />
               : <span aria-hidden="true">{getInitials(member.name)}</span>}
           </span>
           <span className="eboard-text">

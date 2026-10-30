@@ -102,17 +102,16 @@ button { transition: background-color 150ms, color 150ms, opacity 150ms; }
 .has-error .assistant-text { color: #deb09b; }
 /* In-chat UI matches the Claude app's suggestion chips: flat filled pills, no borders, icon and label in one color. */
 .club-links, .eboard-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; font-family: var(--font-styrene-b), ui-sans-serif, system-ui, sans-serif; font-size: 15px; line-height: 1; letter-spacing: -0.1px; }
-.club-link, .eboard-member { display: flex; align-items: center; height: 28px; border-radius: 7px; background: #393937; color: #efede8; }
-.club-link { gap: 7px; padding: 0 11px 0 9px; text-decoration: none; transition: background-color .15s; }
+.club-link, .eboard-member { display: flex; align-items: center; background: #393937; color: #efede8; }
+.club-link { height: 28px; border-radius: 7px; gap: 7px; padding: 0 11px 0 9px; text-decoration: none; transition: background-color .15s; }
 .club-link svg { flex: 0 0 auto; }
 .club-link:hover { background: #454543; }
 .club-link:focus-visible { outline: 2px solid #8f8b80; outline-offset: 2px; }
-.eboard-member { gap: 7px; padding: 0 11px 0 5px; }
-.eboard-avatar { position: relative; display: grid; place-items: center; flex: 0 0 20px; width: 20px; height: 20px; overflow: hidden; border-radius: 50%; background: #4a4a47; color: #efede8; font-size: 9px; letter-spacing: .2px; }
+.eboard-member { gap: 10px; padding: 6px 16px 6px 6px; border-radius: 10px; }
+.eboard-avatar { position: relative; display: grid; place-items: center; flex: 0 0 36px; width: 36px; height: 36px; overflow: hidden; border-radius: 50%; background: #4a4a47; color: #efede8; font-size: 13px; letter-spacing: .2px; }
 .eboard-avatar img { object-fit: cover; }
-.eboard-text { display: flex; gap: 6px; white-space: nowrap; }
-.eboard-role { color: #a6a49e; }
-.eboard-role::before { content: "\00b7"; margin-right: 6px; }
+.eboard-text { display: flex; flex-direction: column; gap: 4px; white-space: nowrap; }
+.eboard-role { color: #a6a49e; font-size: 13px; }
 .conversation-composer { width: 100%; max-width: 800px; align-self: center; padding: 0 max(16px, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(16px, env(safe-area-inset-left)); flex-shrink: 0; }
 .chat-disclaimer { margin: 10px 0 13px; text-align: center; color: #88867f; font-size: 11px; }
 
@@ -154,7 +153,7 @@ button { transition: background-color 150ms, color 150ms, opacity 150ms; }
 }
 @media (pointer: coarse) {
   .composer-attach, .composer-send, .new-chat-button, .message-copy { min-width: 44px; min-height: 44px; }
-  .club-link, .eboard-member { height: 36px; }
+  .club-link { height: 36px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .thinking-mark .thinking-animated { display: none; }

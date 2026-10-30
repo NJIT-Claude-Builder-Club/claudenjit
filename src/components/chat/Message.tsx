@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import { ThinkingIndicator } from './ThinkingIndicator';
 import { ClubLinkCards } from './ClubLinkCards';
 import { EboardCards } from './EboardCards';
-import { getClubLinks, getEboardCards } from '@/lib/chat-presentation';
+import { getClubLinks, getCopyText, getEboardCards, hasDisplayedCards } from '@/lib/chat-presentation';
 
 export const Message = memo(function Message({ message }: { message: MessageType }) {
   const [copied, setCopied] = useState(false);
@@ -17,7 +17,7 @@ export const Message = memo(function Message({ message }: { message: MessageType
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(message.content);
+      await navigator.clipboard.writeText(getCopyText(message.content, message.toolsUsed));
       setCopied(true);
       setCopyFailed(false);
       if (copyTimer.current) clearTimeout(copyTimer.current);
@@ -47,7 +47,7 @@ export const Message = memo(function Message({ message }: { message: MessageType
       {message.isStreaming && message.isThinking && (
         <ThinkingIndicator />
       )}
-      {!message.isStreaming && message.content && (
+      {!message.isStreaming && (message.content || hasDisplayedCards(message.toolsUsed)) && (
         <div className="message-actions">
           <button type="button" onClick={handleCopy} className="message-copy" title={copied ? 'Copied!' : 'Copy response'} aria-label={copied ? 'Copied!' : 'Copy response'}>
             {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
