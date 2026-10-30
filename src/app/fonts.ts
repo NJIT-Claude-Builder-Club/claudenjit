@@ -24,3 +24,13 @@ export const styrene = localFont({
   fallback: ["ui-sans-serif","system-ui","sans-serif"],
   preload: true
 });
+// The narrower Styrene B matches the Claude app's UI labels (chips in chat replies).
+export const styreneB = localFont({
+  src: [
+    { path: "../../public/fonts/styrene-font-family-1757345710-0/StyreneB-Regular-Trial-BF63f6cbe9db1d5.otf", weight: "400", style: "normal" }
+  ],
+  variable: "--font-styrene-b",
+  display: "swap",
+  fallback: ["ui-sans-serif","system-ui","sans-serif"],
+  preload: false
+});

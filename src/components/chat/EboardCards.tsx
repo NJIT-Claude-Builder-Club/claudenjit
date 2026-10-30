@@ -4,16 +4,18 @@ import { getInitials, type EboardCard } from '@/lib/chat-presentation';
 export function EboardCards({ members }: { members: EboardCard[] }) {
   if (members.length === 0) return null;
   return (
-    <ul className="eboard-cards" aria-label="E-board">
+    <ul className="eboard-list" aria-label="E-board">
       {members.map((member) => (
-        <li key={member.name} className="eboard-card">
-          <div className="eboard-photo">
+        <li key={member.name} className="eboard-member">
+          <span className="eboard-avatar">
             {member.photo
-              ? <Image src={member.photo} alt={`Photo of ${member.name}`} fill sizes="(max-width: 540px) 45vw, 240px" />
-              : <span className="eboard-initials" aria-hidden="true">{getInitials(member.name)}</span>}
-          </div>
-          <div className="eboard-name">{member.name}</div>
-          <div className="eboard-role">{member.role}</div>
+              ? <Image src={member.photo} alt="" fill sizes="40px" />
+              : <span aria-hidden="true">{getInitials(member.name)}</span>}
+          </span>
+          <span className="eboard-text">
+            <span className="eboard-name">{member.name}</span>
+            <span className="eboard-role">{member.role}</span>
+          </span>
         </li>
       ))}
     </ul>
