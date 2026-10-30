@@ -2,9 +2,16 @@ import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest } from 'next/server';
 import { DEFAULT_MCP_TOOLS, executeMCPTool } from '@/lib/mcp-tools';
 import { getSystemMessage } from '@/lib/chat-policy';
+import {
+  DECLINED_REPLY, SCREEN_SYSTEM, UNCLEAR_REPLY,
+  checkConversation, clientKey, createRateLimiter, isNonsense, messageText, screenMessage,
+} from '@/lib/chat-guard';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
+
+// Best effort: counts are per server instance and reset on cold starts.
+const allowRequest = createRateLimiter();
 
 function getChatError(error: unknown): string {
   if (error instanceof Anthropic.APIError) {
@@ -33,6 +40,14 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: 'Please send valid JSON.' }, { status: 400 });
   }
 
+  if (!allowRequest(clientKey(req.headers))) {
+    return Response.json({ error: "You're sending messages too quickly. Please wait a minute and try again." }, { status: 429 });
+  }
+  const checked = checkConversation(messages);
+  if (!checked.ok) return Response.json({ error: checked.error }, { status: checked.status });
+  messages = checked.messages;
+  const latestText = messageText(messages[messages.length - 1].content);
+
   if (!process.env.ANTHROPIC_API_KEY) {
     console.error('Chat configuration error: ANTHROPIC_API_KEY is missing');
     return Response.json({ error: 'Chat is temporarily unavailable. Please try again later.' }, { status: 503 });
@@ -46,15 +61,33 @@ export async function POST(req: NextRequest) {
       const send = (event: Record<string, unknown>) => {
         if (!cancelled) controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
       };
+      const reply = (text: string) => {
+        send({ type: 'content_block_delta', delta: { type: 'text_delta', text } });
+        send({ type: 'message_stop' });
+      };
       try {
         const conversationMessages = [...messages];
         send({ type: 'message_start' });
+        if (isNonsense(latestText)) return reply(UNCLEAR_REPLY);
+        send({ type: 'thinking' });
+        const verdict = await screenMessage(latestText, async (text) => {
+          const screen = await anthropic.messages.create({
+            model: process.env.ANTHROPIC_SCREEN_MODEL || 'claude-haiku-5-5',
+            max_tokens: 5,
+            thinking: { type: 'disabled' },
+            system: SCREEN_SYSTEM,
+            messages: [{ role: 'user', content: `<message>\n${text}\n</message>` }],
+          }, { signal: req.signal, timeout: 5_000, maxRetries: 0 });
+          return screen.content.map((block) => block.type === 'text' ? block.text : '').join('');
+        });
+        if (cancelled) return;
+        if (verdict === 'block') return reply(DECLINED_REPLY);
         // Bound tool calls so an unexpected tool loop cannot run indefinitely.
         for (let round = 0; round < 8; round++) {
           send({ type: 'thinking' });
           const stream = anthropic.messages.stream({
             model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
-            max_tokens: 4096,
+            max_tokens: 2048,
             system: getSystemMessage(),
             messages: conversationMessages,
             tools: DEFAULT_MCP_TOOLS,

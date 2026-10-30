@@ -28,7 +28,7 @@ This is maintained context, not a live Discord, Instagram, calendar, or web-sear
 
 `npm test` checks roster consistency, missing event details, member-benefit distinctions, public-data boundaries, freshness behavior, and the existing streaming/presentation regressions.
 
-For a running app, run `npm run eval:chat -- <app URL>`. This makes twelve real model requests and can consume API credits. It checks leadership, unknown event details, benefits, private-program questions, attempts to replace approved facts, stale chat history, and response style. Review the actual answers as well as the checks; passing regex assertions is not proof of universal model reliability.
+For a running app, run `npm run eval:chat -- <app URL>`. This sends thirteen chat requests; all but the gibberish check reach Claude (a Haiku screen, then the main model), so it consumes API credits. It checks leadership, unknown event details, benefits, private-program questions, attempts to replace approved facts, stale chat history, and response style. Review the actual answers as well as the checks; passing regex assertions is not proof of universal model reliability.
 
 Tone: answer directly in natural sentences, use contractions, and keep simple questions brief. No emojis, em dashes, generic praise, canned enthusiasm, or promotional sign-offs. General project help is allowed, but suggestions must not become invented club policy.
 
