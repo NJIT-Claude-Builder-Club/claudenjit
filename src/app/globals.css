@@ -112,6 +112,11 @@ button { transition: background-color 150ms, color 150ms, opacity 150ms; }
 .eboard-avatar img { object-fit: cover; }
 .eboard-text { display: flex; flex-direction: column; gap: 4px; white-space: nowrap; }
 .eboard-role { color: #a6a49e; font-size: 13px; }
+.eboard-single .eboard-member { gap: 16px; padding: 10px 24px 10px 10px; border-radius: 14px; }
+.eboard-single .eboard-avatar { flex-basis: 96px; width: 96px; height: 96px; font-size: 30px; }
+.eboard-single .eboard-text { gap: 7px; }
+.eboard-single .eboard-name { font-size: 18px; }
+.eboard-single .eboard-role { font-size: 15px; }
 .conversation-composer { width: 100%; max-width: 800px; align-self: center; padding: 0 max(16px, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(16px, env(safe-area-inset-left)); flex-shrink: 0; }
 .chat-disclaimer { margin: 10px 0 13px; text-align: center; color: #88867f; font-size: 11px; }
 
