@@ -64,6 +64,20 @@ export const DEFAULT_MCP_TOOLS: MCPTool[] = [
     },
   },
   {
+    name: 'show_eboard',
+    description: 'Show photo cards for current e-board members below your reply. Use it when a member asks who leads the club or about a specific officer. Members without a photo get an initials avatar. Still name each member and role in your reply.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        names: {
+          type: 'array',
+          items: { type: 'string', enum: eboard.map(({ name }) => name) },
+          description: 'Members to show. Omit to show the whole e-board.',
+        },
+      },
+    },
+  },
+  {
     name: 'search_workshops',
     description: 'Check the maintained workshop and meeting list. No specific meetings or workshops are currently confirmed in this data. This tool cannot browse announcements or a live calendar.',
     input_schema: {
@@ -118,6 +132,13 @@ export async function executeMCPTool(toolName: string, toolInput: Record<string,
       return links.length === 0
         ? unconfirmed('That club channel is not available.')
         : { ...metadata, status: 'shown', message: 'Link cards are now shown to the member below your reply.', links };
+    }
+    case 'show_eboard': {
+      const names = Array.isArray(toolInput.names) ? toolInput.names.map(String) : [];
+      const members = names.length === 0 ? eboard : eboard.filter(({ name }) => names.includes(name));
+      return members.length === 0
+        ? unconfirmed('That person is not on the current e-board.')
+        : { ...metadata, status: 'shown', message: 'E-board cards are now shown to the member below your reply.', members };
     }
     case 'search_workshops':
       return { ...metadata, status: 'no_confirmed_events', meetings: [], workshops: [], plannedHackathon: clubContext.events.hackathon, announcements: clubContext.contacts.discord, message: 'No specific meeting or workshop is confirmed in this maintained data. This is not a live calendar search.' };

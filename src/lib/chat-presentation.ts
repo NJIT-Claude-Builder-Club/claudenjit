@@ -95,3 +95,31 @@ export function getClubLinks(toolsUsed: Array<{ name: string; result?: unknown }
   }
   return [...links.values()];
 }
+
+export interface EboardCard {
+  name: string;
+  role: string;
+  photo: string | null;
+}
+
+// Collect e-board cards from show_eboard results. Photos must be local files in public/eboardpics.
+export function getEboardCards(toolsUsed: Array<{ name: string; result?: unknown }> = []): EboardCard[] {
+  const cards = new Map<string, EboardCard>();
+  for (const tool of toolsUsed) {
+    if (tool.name !== 'show_eboard') continue;
+    const entries = (tool.result as { members?: unknown } | undefined)?.members;
+    if (!Array.isArray(entries)) continue;
+    for (const entry of entries) {
+      const { name, role, photo } = (entry ?? {}) as Record<string, unknown>;
+      if (typeof name !== 'string' || typeof role !== 'string') continue;
+      const safePhoto = typeof photo === 'string' && /^\/eboardpics\/[\w.-]+$/.test(photo) ? photo : null;
+      cards.set(name, { name, role, photo: safePhoto });
+    }
+  }
+  return [...cards.values()];
+}
+
+export function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  return ((parts[0]?.[0] ?? '') + (parts.length > 1 ? parts.at(-1)![0] : '')).toUpperCase();
+}

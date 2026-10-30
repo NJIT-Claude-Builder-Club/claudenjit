@@ -1,5 +1,5 @@
 [
-  { "name": "Donovan McHenry", "role": "President" },
-  { "name": "Walter Zhong", "role": "Vice President" },
-  { "name": "Dhruva Lepakshi", "role": "Marketing Manager" }
+  { "name": "Donovan McHenry", "role": "President", "photo": "/eboardpics/donovan-mchenry.png" },
+  { "name": "Walter Zhong", "role": "Vice President", "photo": "/eboardpics/walter-zhong.jpeg" },
+  { "name": "Dhruva Lepakshi", "role": "Marketing Manager", "photo": null }
 ]
