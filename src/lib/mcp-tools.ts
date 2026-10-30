@@ -32,7 +32,7 @@ export const DEFAULT_MCP_TOOLS: MCPTool[] = [
   },
   {
     name: 'get_member_benefits',
-    description: 'Read member-facing API-credit eligibility and setup guidance, and the distinction between API credits and Claude Pro. Cannot submit requests, access private forms, or inspect accounts.',
+    description: 'Read member-facing benefit guidance. The eligibility, organization_id, and request_process topics cover API credits; claude_pro covers the separate Claude Pro benefit from meeting attendance and check-in, including what is not confirmed. Cannot submit requests, access private forms, or inspect accounts.',
     input_schema: {
       type: 'object',
       properties: { topic: { type: 'string', enum: ['overview', 'eligibility', 'organization_id', 'request_process', 'claude_pro'] } },

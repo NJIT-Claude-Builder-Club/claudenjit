@@ -26,7 +26,16 @@
       "requestProcess": "Ask the e-board for the current member sign-up and credit-request steps. This site cannot submit a request or check an account's credit status.",
       "availability": "Signing up does not immediately or automatically grant credits. No delivery date is confirmed here."
     },
-    "claudePro": "API credits are separate from a Claude Pro subscription. No Claude Pro subscription benefit is confirmed for general club members."
+    "claudePro": {
+      "description": "Club members can get Claude Pro by attending meetings and completing the meeting check-in form.",
+      "eligibility": "Attend club meetings and complete the meeting check-in form. Joining the club does not by itself grant Claude Pro.",
+      "separateFromApiCredits": "Claude Pro and the $25 Claude API credits are separate benefits. API credits are for programmatic use in projects and do not activate a Pro subscription.",
+      "requestProcess": "Follow the check-in instructions given at the meeting, or ask the e-board for the current steps. This site cannot check eligibility or Pro status.",
+      "availability": "Completing check-in is not confirmed to activate Pro immediately or automatically. No activation date is confirmed here.",
+      "unconfirmed": "How long the benefit lasts, how many meetings or how often members must attend, when access is activated, and renewal rules are not confirmed.",
+      "confirmedOn": "2026-10-29",
+      "source": "October 29, 2026 Claude Code workshop"
+    }
   },
   "events": {
     "hackathon": {
@@ -50,6 +59,7 @@
     "NJIT registered student organization approval status",
     "Recurring meeting schedule",
     "Specific upcoming workshops",
-    "Hackathon dates, location, registration, prizes, rules, and schedule"
+    "Hackathon dates, location, registration, prizes, rules, and schedule",
+    "Claude Pro benefit duration, attendance requirements, activation timing, and renewal rules"
   ]
 }

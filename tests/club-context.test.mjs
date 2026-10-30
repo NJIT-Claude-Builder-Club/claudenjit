@@ -32,7 +32,24 @@ test('member benefit guidance separates API credits from subscriptions and inclu
   assert.match(result.data.apiCredits.organizationId,/platform\.claude\.com/);
   assert.match(result.data.apiCredits.eligibility,/school email/);
   assert.match(result.data.apiCredits.availability,/not immediately or automatically/);
-  assert.match(result.data.claudePro,/No Claude Pro subscription benefit is confirmed/);
+});
+
+test('Claude Pro comes from meeting attendance and check-in, separate from API credits, with no invented details', async () => {
+  const {data} = await executeMCPTool('get_member_benefits',{topic:'claude_pro'});
+  assert.match(data.description,/attending meetings/);
+  assert.match(data.description,/check-in form/);
+  assert.match(data.eligibility,/Joining the club does not by itself grant Claude Pro/);
+  assert.match(data.separateFromApiCredits,/separate/);
+  assert.match(data.separateFromApiCredits,/do not activate/);
+  for(const detail of [/how long/i,/how many meetings|how often/i,/activated/i,/renewal/i]) assert.match(data.unconfirmed,detail);
+  assert.match(data.requestProcess,/cannot check eligibility or Pro status/);
+  assert.equal(data.confirmedOn,'2026-10-29');
+  assert.equal(club.reviewedOn,'2026-10-14');
+  assert.doesNotMatch(JSON.stringify(data),/\b\d+\s*(?:months?|weeks?|days?|meetings?)\b|forms\.gle|https?:/i);
+  assert.deepEqual((await executeMCPTool('get_member_benefits',{topic:'overview'})).data, club.memberBenefits);
+  const system=getSystemMessage(new Date('2026-10-29T14:00:00Z'));
+  assert(system.includes(club.memberBenefits.claudePro.description));
+  assert.doesNotMatch(system,/isn't a confirmed member benefit|No Claude Pro subscription benefit is confirmed/);
 });
 
 test('published data contains no internal operational fields or private form links', () => {
