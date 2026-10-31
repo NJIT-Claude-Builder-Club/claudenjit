@@ -1,5 +1,5 @@
 [
-  { "name": "Donovan McHenry", "role": "President", "photo": "/eboardpics/donovan-mchenry.png" },
-  { "name": "Walter Zhong", "role": "Vice President", "photo": "/eboardpics/walter-zhong.jpeg" },
-  { "name": "Dhruva Lepakshi", "role": "Marketing Manager", "photo": "/eboardpics/dhruva-lepakshi.jpeg" }
+  { "name": "Donovan McHenry", "role": "President", "photo": "/eboardpics/donovan-mchenry.png", "linkedin": "https://www.linkedin.com/in/donovanmchenry/" },
+  { "name": "Walter Zhong", "role": "Vice President", "photo": "/eboardpics/walter-zhong.jpeg", "linkedin": "https://www.linkedin.com/in/waltzhong/" },
+  { "name": "Dhruva Lepakshi", "role": "Marketing Manager", "photo": "/eboardpics/dhruva-lepakshi.jpeg", "linkedin": "https://www.linkedin.com/in/dhruva-lepakshi/" }
 ]

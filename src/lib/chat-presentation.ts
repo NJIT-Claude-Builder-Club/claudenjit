@@ -100,9 +100,11 @@ export interface EboardCard {
   name: string;
   role: string;
   photo: string | null;
+  linkedin: string | null;
 }
 
-// Collect e-board cards from show_eboard results. Photos must be local files in public/eboardpics.
+// Collect e-board cards from show_eboard results. Photos must be local files in public/eboardpics,
+// and profile links must be LinkedIn profile URLs.
 export function getEboardCards(toolsUsed: Array<{ name: string; result?: unknown }> = []): EboardCard[] {
   const cards = new Map<string, EboardCard>();
   for (const tool of toolsUsed) {
@@ -110,10 +112,11 @@ export function getEboardCards(toolsUsed: Array<{ name: string; result?: unknown
     const entries = (tool.result as { members?: unknown } | undefined)?.members;
     if (!Array.isArray(entries)) continue;
     for (const entry of entries) {
-      const { name, role, photo } = (entry ?? {}) as Record<string, unknown>;
+      const { name, role, photo, linkedin } = (entry ?? {}) as Record<string, unknown>;
       if (typeof name !== 'string' || typeof role !== 'string') continue;
       const safePhoto = typeof photo === 'string' && /^\/eboardpics\/[\w.-]+$/.test(photo) ? photo : null;
-      cards.set(name, { name, role, photo: safePhoto });
+      const safeLinkedin = typeof linkedin === 'string' && /^https:\/\/www\.linkedin\.com\/in\/[\w-]+\/?$/.test(linkedin) ? linkedin : null;
+      cards.set(name, { name, role, photo: safePhoto, linkedin: safeLinkedin });
     }
   }
   return [...cards.values()];
@@ -133,7 +136,7 @@ export function hasDisplayedCards(toolsUsed: DisplayTools = []): boolean {
 // Copying a reply includes what its cards show, since the text no longer repeats it.
 export function getCopyText(content: string, toolsUsed: DisplayTools = []): string {
   const cards = [
-    ...getEboardCards(toolsUsed).map((member) => `${member.name} · ${member.role}`),
+    ...getEboardCards(toolsUsed).map((member) => [member.name, member.role, member.linkedin].filter(Boolean).join(' · ')),
     ...getClubLinks(toolsUsed).map((link) => `${link.label}: ${link.url.replace(/^mailto:/, '')}`),
   ];
   return [content.trim(), cards.join('\n')].filter(Boolean).join('\n\n');

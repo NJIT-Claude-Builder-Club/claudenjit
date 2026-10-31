@@ -94,6 +94,11 @@ test('e-board cards use local photos for current members only', async () => {
   for (const photo of photos) assert(existsSync(new URL(`../public${photo}`, import.meta.url)), photo);
   assert.deepEqual(readdirSync(new URL('../public/eboardpics', import.meta.url)).map((file)=>`/eboardpics/${file}`).sort(), [...photos].sort());
   assert(board.every(({photo})=>photo), 'Every current e-board member has a photo');
+  assert.deepEqual(board.map(({linkedin})=>linkedin), [
+    'https://www.linkedin.com/in/donovanmchenry/',
+    'https://www.linkedin.com/in/waltzhong/',
+    'https://www.linkedin.com/in/dhruva-lepakshi/',
+  ]);
 
   assert.deepEqual((await executeMCPTool('show_eboard',{})).members, board);
   assert.deepEqual((await executeMCPTool('show_eboard',{names:['Walter Zhong']})).members.map(({name})=>name), ['Walter Zhong']);
