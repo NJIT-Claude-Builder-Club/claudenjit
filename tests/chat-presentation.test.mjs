@@ -73,15 +73,15 @@ test('e-board cards accept only local photos and fall back to initials', () => {
   assert.deepEqual(getEboardCards([
     { name: 'show_club_links', result: { members: [{ name: 'X', role: 'Y', photo: null }] } },
     { name: 'show_eboard', result: { members: [
-      { name: 'Donovan McHenry', role: 'President', photo: '/eboardpics/donovan-mchenry.png' },
-      { name: 'Walter Zhong', role: 'Vice President', photo: 'https://evil.example/x.png' },
-      { name: 'Dhruva Lepakshi', role: 'Marketing Manager', photo: '/eboardpics/../secret' },
+      { name: 'Donovan McHenry', role: 'President', photo: '/eboardpics/donovan-mchenry.png', linkedin: 'https://www.linkedin.com/in/donovanmchenry/' },
+      { name: 'Walter Zhong', role: 'Vice President', photo: 'https://evil.example/x.png', linkedin: 'javascript:alert(1)' },
+      { name: 'Dhruva Lepakshi', role: 'Marketing Manager', photo: '/eboardpics/../secret', linkedin: 'https://www.linkedin.com.evil.example/in/x/' },
       { name: 'No role' }, null,
     ] } },
   ]), [
-    { name: 'Donovan McHenry', role: 'President', photo: '/eboardpics/donovan-mchenry.png' },
-    { name: 'Walter Zhong', role: 'Vice President', photo: null },
-    { name: 'Dhruva Lepakshi', role: 'Marketing Manager', photo: null },
+    { name: 'Donovan McHenry', role: 'President', photo: '/eboardpics/donovan-mchenry.png', linkedin: 'https://www.linkedin.com/in/donovanmchenry/' },
+    { name: 'Walter Zhong', role: 'Vice President', photo: null, linkedin: null },
+    { name: 'Dhruva Lepakshi', role: 'Marketing Manager', photo: null, linkedin: null },
   ]);
   assert.equal(getInitials('Dhruva Lepakshi'), 'DL');
   assert.equal(getInitials('  Cher '), 'C');
@@ -90,13 +90,13 @@ test('e-board cards accept only local photos and fall back to initials', () => {
 
 test('card-only replies count as complete and copy includes card contents', () => {
   const tools = [
-    { name: 'show_eboard', result: { members: [{ name: 'Donovan McHenry', role: 'President', photo: null }] } },
+    { name: 'show_eboard', result: { members: [{ name: 'Donovan McHenry', role: 'President', photo: null, linkedin: 'https://www.linkedin.com/in/donovanmchenry/' }] } },
     { name: 'show_club_links', result: { links: [{ channel: 'email', label: 'Email', description: 'x', url: 'mailto:a@b.c' }] } },
   ];
   assert.equal(hasDisplayedCards(tools), true);
   assert.equal(hasDisplayedCards([{ name: 'get_club_info', result: {} }]), false);
   assert.equal(hasDisplayedCards(), false);
-  assert.equal(getCopyText("Here's the current e-board.", tools), "Here's the current e-board.\n\nDonovan McHenry · President\nEmail: a@b.c");
-  assert.equal(getCopyText('', tools), 'Donovan McHenry · President\nEmail: a@b.c');
+  assert.equal(getCopyText("Here's the current e-board.", tools), "Here's the current e-board.\n\nDonovan McHenry · President · https://www.linkedin.com/in/donovanmchenry/\nEmail: a@b.c");
+  assert.equal(getCopyText('', tools), 'Donovan McHenry · President · https://www.linkedin.com/in/donovanmchenry/\nEmail: a@b.c');
   assert.equal(getCopyText('  Plain reply. ', []), 'Plain reply.');
 });

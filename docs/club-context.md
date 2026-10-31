@@ -4,7 +4,7 @@ The site serves club members. It does not provide access to ambassador operation
 
 ## Maintained facts
 
-- `src/data/eboard.json`: the roster and titles confirmed by Donovan on October 14, 2026, and each member's photo in `public/eboardpics` (`null` shows an initials avatar). Keep only current members' photos in that folder.
+- `src/data/eboard.json`: the roster and titles confirmed by Donovan on October 14, 2026, each member's photo in `public/eboardpics` (`null` shows an initials avatar), and their public LinkedIn profile, which the e-board cards link to. Keep only current members' photos in that folder.
 - `src/data/club-context.json`: reviewed member-facing club facts, existing public contact channels, limited program-benefit guidance, and event confirmation status.
 - `src/lib/chat-policy.ts`: grounding, privacy, date handling, tone, and examples. The system context and information tools use the same data files.
 

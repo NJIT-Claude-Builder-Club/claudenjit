@@ -108,6 +108,11 @@ button { transition: background-color 150ms, color 150ms, opacity 150ms; }
 .club-link:hover { background: #454543; }
 .club-link:focus-visible { outline: 2px solid #8f8b80; outline-offset: 2px; }
 .eboard-member { gap: 10px; padding: 6px 16px 6px 6px; border-radius: 10px; }
+.eboard-link { text-decoration: none; transition: background-color .15s; }
+.eboard-link:hover { background: #454543; }
+.eboard-link:focus-visible { outline: 2px solid #8f8b80; outline-offset: 2px; }
+.eboard-linkedin { flex: 0 0 auto; margin-left: 6px; color: #a6a49e; }
+.eboard-link:hover .eboard-linkedin { color: #efede8; }
 .eboard-avatar { position: relative; display: grid; place-items: center; flex: 0 0 36px; width: 36px; height: 36px; overflow: hidden; border-radius: 50%; background: #4a4a47; color: #efede8; font-size: 13px; letter-spacing: .2px; }
 .eboard-avatar img { object-fit: cover; }
 .eboard-text { display: flex; flex-direction: column; gap: 4px; white-space: nowrap; }
@@ -117,6 +122,7 @@ button { transition: background-color 150ms, color 150ms, opacity 150ms; }
 .eboard-single .eboard-text { gap: 7px; }
 .eboard-single .eboard-name { font-size: 18px; }
 .eboard-single .eboard-role { font-size: 15px; }
+.eboard-single .eboard-linkedin { margin-left: 10px; }
 .conversation-composer { width: 100%; max-width: 800px; align-self: center; padding: 0 max(16px, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(16px, env(safe-area-inset-left)); flex-shrink: 0; }
 .chat-disclaimer { margin: 10px 0 13px; text-align: center; color: #88867f; font-size: 11px; }
 
